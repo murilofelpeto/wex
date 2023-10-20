@@ -10,6 +10,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
     info = @Info(
         title = "WEX - Purchase",
         version = "1",
-        description = "This API helps manage all properties that are for sale, rent, generate contracts and much more",
+        description = "This API helps manage all purchases made by WEX users",
         contact = @Contact(url = "https://wex.io", name = "WEX", email = "contato@wex.io")
     )
 )
@@ -29,14 +30,13 @@ public class OpenApiController {
 
   @GET
   @Operation(hidden = true)
-  public InputStream openApi() {
+  public InputStream openApi() throws URISyntaxException {
     log.info("Open API");
-    final var location = OpenApiController.class
-        .getProtectionDomain()
+    final String path = getClass().getProtectionDomain()
         .getCodeSource()
-        .getLocation();
-    final String file = location.getFile().replace("classes/", "resources/")
-        + "com/felpeto/wex/controller/openapi.json";
-    return OpenApiController.class.getResourceAsStream("openapi.json");
+        .getLocation()
+        .toURI()
+        .getPath();
+    return OpenApiController.class.getResourceAsStream("/openapi.json");
   }
 }

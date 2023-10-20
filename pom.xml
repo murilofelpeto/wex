@@ -52,7 +52,7 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-postgresql</artifactId>
+      <artifactId>quarkus-jdbc-mysql</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -145,7 +145,7 @@
         <configuration>
           <outputFileName>openapi</outputFileName>
           <outputFormat>JSONANDYAML</outputFormat>
-          <outputPath>${basedir}/target/resources/com/felpeto/wex/controller</outputPath>
+          <outputPath>${basedir}/target/classes</outputPath>
           <prettyPrint>true</prettyPrint>
           <resourcePackages>
             <package>com.felpeto.purchase.controller</package>
