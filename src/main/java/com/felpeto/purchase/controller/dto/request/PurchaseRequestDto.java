@@ -10,7 +10,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class PurchaseRequestDto {
 
   @Schema(name = "transactionDate", description = "Transaction date", requiredMode = REQUIRED)
   @PastOrPresent(message = "Transaction date cannot be in the future")
-  private LocalDateTime transactionDate;
+  private LocalDate transactionDate;
 
   @Schema(name = "amount", description = "Amount", requiredMode = REQUIRED)
   @Digits(fraction = 2, integer = Integer.MAX_VALUE, message = "Amount must be a number")

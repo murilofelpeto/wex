@@ -17,10 +17,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -39,7 +43,7 @@ public class PurchaseController {
       responses = {
           @ApiResponse(
               responseCode = "201",
-              description = "Return the created owner",
+              description = "Return the saved purchase",
               content =
               @Content(
                   mediaType = APPLICATION_JSON,
@@ -62,5 +66,34 @@ public class PurchaseController {
     return Response.status(CREATED)
         .entity(toPurchaseResponseDto(response))
         .build();
+  }
+
+  @Operation(
+      summary = "Retrive a purchase",
+      responses = {
+          @ApiResponse(
+              responseCode = "200",
+              description = "Return the purchase",
+              content =
+              @Content(
+                  mediaType = APPLICATION_JSON,
+                  schema = @Schema(implementation = PurchaseResponseDto.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "Entity not found",
+              content =
+              @Content(
+                  mediaType = APPLICATION_JSON,
+                  schema = @Schema(implementation = ErrorResponseDto.class)))
+      })
+  @GET
+  @Path("/{uuid}")
+  @Consumes(APPLICATION_JSON)
+  @Produces(APPLICATION_JSON)
+  public Response get(@PathParam("uuid") final UUID uuid, @QueryParam("country") final String country) {
+    log.info("Retrieving purchase {}", uuid);
+    final var response = service.getPurchaseTransaction(uuid, country);
+    return Response.ok(toPurchaseResponseDto(response)).build();
+
   }
 }

@@ -38,24 +38,22 @@ class MoneyTest {
   }
 
   @Test
-  void givenValueOneWhenBuildMoneyThenReturnValidMoney() {
-    final var one = BigDecimal.ONE.setScale(2, RoundingMode.HALF_UP);
+  void givenValueOneWhenBuildNotRoundedMoneyThenReturnValidMoney() {
+    final var one = BigDecimal.ONE;
     final var money = Money.of(one);
     assertThat(money.getValue()).isEqualTo(one);
-    assertThat(money.getValue().scale()).isEqualTo(2);
   }
 
   @Test
-  void givenBelowOneWhenBuildMoneyThenReturnValidMoney() {
-    final var zero = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+  void givenBelowOneWhenBuildNotRoundedMoneyThenReturnValidMoney() {
+    final var zero = BigDecimal.ZERO;
     final var money = Money.of(zero);
 
     assertThat(money.getValue()).isEqualTo(zero);
-    assertThat(money.getValue().scale()).isEqualTo(2);
   }
 
   @Test
-  void givenNegativeValueWhenBuildMoneyThenThrowException() {
+  void givenNegativeValueWhenBuildNotRoundedMoneyThenThrowException() {
     final var value = BigDecimal.valueOf(faker.number().randomDouble(2, -5, -1));
     final var exception = catchThrowableOfType(() -> Money.of(value),
         InvalidNumberLimitException.class);
@@ -68,8 +66,45 @@ class MoneyTest {
   }
 
   @Test
-  void givenNullValueWhenBuildMoneyThenThrowException() {
+  void givenNullValueWhenBuildNotRoundedMoneyThenThrowException() {
     assertThatThrownBy(() -> Money.of(null))
+        .isExactlyInstanceOf(NullPointerException.class)
+        .hasMessage(MANDATORY_FIELD);
+  }
+
+  @Test
+  void givenValueOneWhenBuildRoundedMoneyThenReturnValidMoney() {
+    final var one = BigDecimal.ONE.setScale(2, RoundingMode.HALF_UP);
+    final var money = Money.roundUp(one);
+    assertThat(money.getValue()).isEqualTo(one);
+    assertThat(money.getValue().scale()).isEqualTo(2);
+  }
+
+  @Test
+  void givenBelowOneWhenBuildRoundedMoneyThenReturnValidMoney() {
+    final var zero = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+    final var money = Money.roundUp(zero);
+
+    assertThat(money.getValue()).isEqualTo(zero);
+    assertThat(money.getValue().scale()).isEqualTo(2);
+  }
+
+  @Test
+  void givenNegativeValueWhenBuildRoundedMoneyThenThrowException() {
+    final var value = BigDecimal.valueOf(faker.number().randomDouble(2, -5, -1));
+    final var exception = catchThrowableOfType(() -> Money.roundUp(value),
+        InvalidNumberLimitException.class);
+
+    assertThat(exception.getMessage()).isEqualTo(format(INVALID_NUMBER, value));
+    assertThat(exception.getParameter()).isEqualTo(FIELD);
+    assertThat(exception.getTarget()).isEqualTo(TARGET);
+    assertThat(exception.getField()).isEqualTo(FIELD);
+    assertThat(exception.getViolationMessage()).isEqualTo(VIOLATION_MESSAGE);
+  }
+
+  @Test
+  void givenNullValueWhenBuildRoundedMoneyThenThrowException() {
+    assertThatThrownBy(() -> Money.roundUp(null))
         .isExactlyInstanceOf(NullPointerException.class)
         .hasMessage(MANDATORY_FIELD);
   }

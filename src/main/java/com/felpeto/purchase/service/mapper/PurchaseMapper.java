@@ -2,6 +2,7 @@ package com.felpeto.purchase.service.mapper;
 
 import static lombok.AccessLevel.PRIVATE;
 
+import com.felpeto.purchase.client.dto.Data;
 import com.felpeto.purchase.model.Purchase;
 import com.felpeto.purchase.model.vo.Description;
 import com.felpeto.purchase.model.vo.Money;
@@ -12,10 +13,23 @@ import lombok.NoArgsConstructor;
 public class PurchaseMapper {
 
   public static Purchase toPurchase(final PurchaseEntity entity) {
-    return new Purchase(
-        entity.uuid,
-        Description.of(entity.description),
-        entity.transactionDate,
-        Money.of(entity.amount));
+    return Purchase.builder()
+        .amount(Money.roundUp(entity.amount))
+        .description(Description.of(entity.description))
+        .transactionDate(entity.transactionDate)
+        .uuid(entity.uuid)
+        .build();
+  }
+
+  public static Purchase toPurchase(final PurchaseEntity entity,
+      final Data exchangeRate) {
+
+    return Purchase.withExchangeRate()
+        .amount(Money.roundUp(entity.amount))
+        .description(Description.of(entity.description))
+        .exchangeRate(Money.of(exchangeRate.getExchangeRate()))
+        .transactionDate(entity.transactionDate)
+        .uuid(entity.uuid)
+        .buildWithExchangeRate();
   }
 }

@@ -26,7 +26,7 @@ public final class Money {
     this.value = value;
   }
 
-  public static Money of(final BigDecimal value) {
+  public static Money roundUp(final BigDecimal value) {
     requireNonNull(value, MANDATORY_FIELD);
 
     if (value.compareTo(BigDecimal.ZERO) < 0) {
@@ -37,6 +37,19 @@ public final class Money {
           VIOLATION_MESSAGE);
     }
     return new Money(value.setScale(2, RoundingMode.HALF_UP));
+  }
+
+  public static Money of(final BigDecimal value) {
+    requireNonNull(value, MANDATORY_FIELD);
+
+    if (value.compareTo(BigDecimal.ZERO) < 0) {
+      throw new InvalidNumberLimitException(format(INVALID_NUMBER, value),
+          FIELD,
+          TARGET,
+          FIELD,
+          VIOLATION_MESSAGE);
+    }
+    return new Money(value);
   }
 
   @Override

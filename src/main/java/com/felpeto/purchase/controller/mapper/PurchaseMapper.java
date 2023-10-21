@@ -7,6 +7,9 @@ import com.felpeto.purchase.controller.dto.response.PurchaseResponseDto;
 import com.felpeto.purchase.model.Purchase;
 import com.felpeto.purchase.model.vo.Description;
 import com.felpeto.purchase.model.vo.Money;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -17,15 +20,23 @@ public class PurchaseMapper {
         null,
         Description.of(requestDto.getDescription()),
         requestDto.getTransactionDate(),
-        Money.of(requestDto.getAmount()));
+        Money.roundUp(requestDto.getAmount()));
   }
 
   public static PurchaseResponseDto toPurchaseResponseDto(final Purchase purchase) {
     return PurchaseResponseDto.builder()
-        .amount(purchase.amount().getValue())
-        .description(purchase.description().getValue())
-        .id(purchase.uuid())
-        .transactionDate(purchase.transactionDate())
+        .amount(purchase.getAmount().getValue())
+        .convertedMoney(getValueOrNull(purchase::getConvertedMoney, Money::getValue))
+        .description(purchase.getDescription().getValue())
+        .exchangeRate(getValueOrNull(purchase::getExchangeRate, Money::getValue))
+        .id(purchase.getUuid())
+        .transactionDate(purchase.getTransactionDate())
         .build();
+  }
+
+  private static <T, U> U getValueOrNull(Supplier<T> supplier, Function<T, U> valueExtractor) {
+    return Optional.ofNullable(supplier.get())
+        .map(valueExtractor)
+        .orElse(null);
   }
 }

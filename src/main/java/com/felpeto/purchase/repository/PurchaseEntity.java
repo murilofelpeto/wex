@@ -4,7 +4,8 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -17,18 +18,12 @@ public class PurchaseEntity extends PanacheEntity {
   public BigDecimal amount;
 
   @Column(name = "transaction_date", nullable = false)
-  public LocalDateTime transactionDate;
+  public LocalDate transactionDate;
 
   @Column(name = "description", nullable = false, length = 50)
   public String description;
 
-  public PurchaseEntity(final PurchaseEntity entity) {
-    this.uuid = entity.uuid;
-    this.amount = entity.amount;
-    this.transactionDate = entity.transactionDate;
-    this.description = entity.description;
-  }
-
-  public PurchaseEntity() {
+  public static Optional<PurchaseEntity> findByUuid(final UUID uuid) {
+    return find("uuid", uuid).firstResultOptional();
   }
 }

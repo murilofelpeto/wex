@@ -3,15 +3,14 @@ package com.felpeto.purchase.model.exceptions;
 import lombok.Getter;
 
 @Getter
-public sealed class UnprocessableEntityException extends RuntimeException
-    permits InvalidDateException, InvalidNumberLimitException, InvalidStringFormatException {
+public final class ValueNotFoundException extends RuntimeException {
 
   private final String parameter;
   private final String target;
   private final String field;
   private final String violationMessage;
 
-  public UnprocessableEntityException(final String message,
+  public ValueNotFoundException(final String message,
       final String parameter,
       final String target,
       final String field,
@@ -23,5 +22,4 @@ public sealed class UnprocessableEntityException extends RuntimeException
     this.field = field;
     this.violationMessage = violationMessage;
   }
-
 }

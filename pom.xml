@@ -57,7 +57,15 @@
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-reactive-jsonb</artifactId>
+      <artifactId>quarkus-resteasy-reactive</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client-reactive-jackson</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -65,20 +73,17 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest-client-reactive-jsonb</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-mysql</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-arc</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-orm</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-arc</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -291,6 +296,7 @@
         <configuration>
           <excludes>
             <exclude>com/felpeto/purchase/controller/configuration/*ObjectMapperConfiguration.*</exclude>
+            <exclude>com/felpeto/purchase/controller/configuration/*BigDecimalSerializer.*</exclude>
           </excludes>
         </configuration>
         <executions>
@@ -347,6 +353,9 @@
           <targetTests>
             <param>${mutation.scan.test}</param>
           </targetTests>
+          <excludedClasses>
+            <param>com.felpeto.purchase.controller.configuration.BigDecimalSerializer</param>
+          </excludedClasses>
         </configuration>
         <dependencies>
           <dependency>

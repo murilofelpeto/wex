@@ -1,7 +1,11 @@
 package com.felpeto.purchase.controller;
 
 import static jakarta.ws.rs.core.Response.Status.CREATED;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -13,7 +17,7 @@ import com.felpeto.purchase.model.vo.Money;
 import com.felpeto.purchase.service.PurchaseService;
 import com.github.javafaker.Faker;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +38,7 @@ class PurchaseControllerTest {
 
   @Test
   void givenPurchaseRequestDtoWhenSaveThenReturnPurchaseResponseDto() {
-    final  var now = LocalDateTime.now();
+    final var now = LocalDate.now();
     final var uuid = UUID.randomUUID();
     final var request = PurchaseRequestDto.builder()
         .amount(BigDecimal.valueOf(faker.number().randomDouble(2, 1, 100)))
@@ -52,13 +56,46 @@ class PurchaseControllerTest {
     assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
 
     verify(service).save(purchase);
+    verify(service, never()).getPurchaseTransaction(any(UUID.class), anyString());
     verifyNoMoreInteractions(service);
   }
 
-  private static Purchase createPurchase(final PurchaseRequestDto request, final UUID uuid) {
-    return new Purchase(uuid,
-        Description.of(request.getDescription()),
-        request.getTransactionDate(),
-        Money.of(request.getAmount()));
+  @Test
+  void givenUuidAndCountryWhenGetPurchaseThenReturnPurchaseResponseDto() {
+    final var uuid = UUID.randomUUID();
+    final var country = faker.country().name();
+    final var purchase = createPurchaseWithExchangeRate(uuid);
+
+    when(service.getPurchaseTransaction(uuid, country)).thenReturn(purchase);
+
+    final var response = controller.get(uuid, country);
+
+    assertThat(response).isNotNull();
+    assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+
+    verify(service).getPurchaseTransaction(uuid, country);
+    verify(service, never()).save(any());
+    verifyNoMoreInteractions(service);
+  }
+
+  private Purchase createPurchaseWithExchangeRate(final UUID uuid) {
+    final var amount = BigDecimal.valueOf(faker.number().randomDouble(2, 1, 100));
+    final var exchangeRate = BigDecimal.valueOf(faker.number().randomDouble(4, 1, 100));
+    return Purchase.withExchangeRate()
+        .amount(Money.roundUp(amount))
+        .description(Description.of(faker.harryPotter().quote()))
+        .exchangeRate(Money.of(exchangeRate))
+        .transactionDate(LocalDate.now())
+        .uuid(uuid)
+        .buildWithExchangeRate();
+  }
+
+  private Purchase createPurchase(final PurchaseRequestDto request, final UUID uuid) {
+    return Purchase.builder()
+        .amount(Money.roundUp(request.getAmount()))
+        .description(Description.of(request.getDescription()))
+        .transactionDate(request.getTransactionDate())
+        .uuid(uuid)
+        .build();
   }
 }

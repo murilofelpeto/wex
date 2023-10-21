@@ -11,6 +11,49 @@
     "version" : "1"
   },
   "paths" : {
+    "/v1/purchase/{uuid}" : {
+      "get" : {
+        "summary" : "Retrive a purchase",
+        "operationId" : "get",
+        "parameters" : [ {
+          "name" : "uuid",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "country",
+          "in" : "query",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return the purchase",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PurchaseResponseDto"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Entity not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/purchase" : {
       "post" : {
         "summary" : "Save a new purchase",
@@ -27,7 +70,7 @@
         },
         "responses" : {
           "201" : {
-            "description" : "Return the created owner",
+            "description" : "Return the saved purchase",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -64,9 +107,15 @@
           },
           "transactionDate" : {
             "type" : "string",
-            "format" : "date-time"
+            "format" : "date"
+          },
+          "exchangeRate" : {
+            "type" : "number"
           },
           "amount" : {
+            "type" : "number"
+          },
+          "convertedMoney" : {
             "type" : "number"
           }
         }
@@ -127,7 +176,7 @@
           "transactionDate" : {
             "type" : "string",
             "description" : "Transaction date",
-            "format" : "date-time"
+            "format" : "date"
           },
           "amount" : {
             "type" : "number",
