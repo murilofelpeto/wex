@@ -17,7 +17,7 @@ public class PurchaseService {
   private final PurchaseEntity entity;
 
   public PurchaseService(final PurchaseEntity entity) {
-    this.entity = entity;
+    this.entity = new PurchaseEntity(entity);
   }
 
   @Transactional
@@ -34,6 +34,6 @@ public class PurchaseService {
 
   @PrePersist
   private void prePersist() {
-      entity.uuid = UUID.randomUUID();
+    entity.uuid = UUID.randomUUID();
   }
 }

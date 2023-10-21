@@ -1,6 +1,7 @@
 package com.felpeto.purchase.model.vo;
 
 import static java.text.MessageFormat.format;
+import static java.util.Objects.requireNonNull;
 
 import com.felpeto.purchase.model.exceptions.InvalidNumberLimitException;
 import java.math.BigDecimal;
@@ -13,10 +14,11 @@ import lombok.ToString;
 @ToString
 public final class Money {
 
+  private static final String MANDATORY_FIELD = "Money is mandatory";
   private static final String INVALID_NUMBER = "value must be greater than or equal to 0: {0}";
   private static final String FIELD = "Money.value";
   private static final String TARGET = Money.class.getSimpleName();
-  private static final String VIOLATION_MESSAGE = "When you build a Money, you must provide a number greater or equal than 1";
+  private static final String VIOLATION_MESSAGE = "When you build a Money, you must provide a number greater or equal than 0";
 
   private final BigDecimal value;
 
@@ -25,9 +27,7 @@ public final class Money {
   }
 
   public static Money of(final BigDecimal value) {
-    if (value == null) {
-      return new Money(null);
-    }
+    requireNonNull(value, MANDATORY_FIELD);
 
     if (value.compareTo(BigDecimal.ZERO) < 0) {
       throw new InvalidNumberLimitException(format(INVALID_NUMBER, value),

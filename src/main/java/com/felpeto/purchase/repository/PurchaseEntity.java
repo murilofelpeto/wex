@@ -21,4 +21,14 @@ public class PurchaseEntity extends PanacheEntity {
 
   @Column(name = "description", nullable = false, length = 50)
   public String description;
+
+  public PurchaseEntity(final PurchaseEntity entity) {
+    this.uuid = entity.uuid;
+    this.amount = entity.amount;
+    this.transactionDate = entity.transactionDate;
+    this.description = entity.description;
+  }
+
+  public PurchaseEntity() {
+  }
 }

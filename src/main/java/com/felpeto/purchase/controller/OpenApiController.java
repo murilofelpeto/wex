@@ -10,8 +10,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -30,13 +28,7 @@ public class OpenApiController {
 
   @GET
   @Operation(hidden = true)
-  public InputStream openApi() throws URISyntaxException {
-    log.info("Open API");
-    final String path = getClass().getProtectionDomain()
-        .getCodeSource()
-        .getLocation()
-        .toURI()
-        .getPath();
+  public InputStream openApi() {
     return OpenApiController.class.getResourceAsStream("/openapi.json");
   }
 }
