@@ -5,6 +5,8 @@ import static jakarta.ws.rs.core.Response.Status.CREATED;
 
 import com.felpeto.purchase.controller.dto.request.PurchaseRequestDto;
 import com.felpeto.purchase.controller.dto.response.PurchaseResponseDto;
+import com.felpeto.purchase.controller.handler.dto.ErrorResponseDto;
+import com.felpeto.purchase.controller.mapper.PurchaseMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,13 +43,15 @@ public class PurchaseController {
               content =
               @Content(
                   mediaType = APPLICATION_JSON,
-                  schema = @Schema(implementation = Object.class)))
+                  schema = @Schema(implementation = ErrorResponseDto.class)))
       })
   @POST
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
   public Response save(@Valid @NotNull final PurchaseRequestDto purchaseRequestDto) {
     log.info("Saving purchase {}", purchaseRequestDto);
+    final var purchase = PurchaseMapper.toPurchase(purchaseRequestDto);
+
     return Response.status(CREATED)
         .entity(new PurchaseResponseDto())
         .build();
