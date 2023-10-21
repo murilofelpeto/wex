@@ -1,5 +1,6 @@
 package com.felpeto.purchase.controller;
 
+import static com.felpeto.purchase.controller.mapper.PurchaseMapper.toPurchaseResponseDto;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.Response.Status.CREATED;
 
@@ -7,6 +8,7 @@ import com.felpeto.purchase.controller.dto.request.PurchaseRequestDto;
 import com.felpeto.purchase.controller.dto.response.PurchaseResponseDto;
 import com.felpeto.purchase.controller.handler.dto.ErrorResponseDto;
 import com.felpeto.purchase.controller.mapper.PurchaseMapper;
+import com.felpeto.purchase.service.PurchaseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,7 +28,12 @@ import lombok.extern.slf4j.Slf4j;
 @Path("/v1/purchase")
 public class PurchaseController {
 
-  //TODO atualizar o response de error após criar os handlers
+  private final PurchaseService service;
+
+  public PurchaseController(final PurchaseService service) {
+    this.service = service;
+  }
+
   @Operation(
       summary = "Save a new purchase",
       responses = {
@@ -51,9 +58,9 @@ public class PurchaseController {
   public Response save(@Valid @NotNull final PurchaseRequestDto purchaseRequestDto) {
     log.info("Saving purchase {}", purchaseRequestDto);
     final var purchase = PurchaseMapper.toPurchase(purchaseRequestDto);
-
+    final var response = service.save(purchase);
     return Response.status(CREATED)
-        .entity(new PurchaseResponseDto())
+        .entity(toPurchaseResponseDto(response))
         .build();
   }
 }
