@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
+  <!-- Spotbugs want Dto to be immutable, so I just ignore all DTO -->
   <Match>
     <Source name="~.*\Dto.java"/>
+  </Match>
+
+  <!-- This exclusion is for the entity id that is never read -->
+  <Match>
+    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
   </Match>
 </FindBugsFilter>

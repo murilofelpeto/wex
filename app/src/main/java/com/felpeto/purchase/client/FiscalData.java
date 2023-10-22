@@ -6,7 +6,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@RegisterRestClient(baseUri = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/")
+@RegisterRestClient(configKey = "fiscal-data")
 public interface FiscalData {
 
   @GET

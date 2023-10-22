@@ -5,14 +5,21 @@
   <groupId>com.felpeto</groupId>
   <artifactId>wex</artifactId>
   <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>integration-test</module>
+    <module>app</module>
+  </modules>
+
   <properties>
     <assertj.version>3.24.2</assertj.version>
     <checkstyle.version>10.12.0</checkstyle.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
-    <coverage.branch>1</coverage.branch>
-    <coverage.line>1</coverage.line>
     <equalsverifier.version>3.15</equalsverifier.version>
     <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+    <coverage.branch>0.96</coverage.branch>
+    <coverage.line>0.96</coverage.line>
     <java-faker.version>1.0.2</java-faker.version>
     <junit-jupiter.version>5.9.3</junit-jupiter.version>
     <lombok.version>1.18.30</lombok.version>
@@ -38,6 +45,7 @@
     <swagger-maven-plugin.version>2.1.6</swagger-maven-plugin.version>
     <to-string-verifier.version>1.4.8</to-string-verifier.version>
   </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -47,107 +55,14 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>app</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
-  <dependencies>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-reactive</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest-client-reactive-jackson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-orm-panache</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-mysql</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-orm</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-arc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger.core.v3</groupId>
-      <artifactId>swagger-core-jakarta</artifactId>
-      <version>${swagger-core.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-validator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.javafaker</groupId>
-      <artifactId>javafaker</artifactId>
-      <version>${java-faker.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.jparams</groupId>
-      <artifactId>to-string-verifier</artifactId>
-      <version>${to-string-verifier.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>nl.jqno.equalsverifier</groupId>
-      <artifactId>equalsverifier</artifactId>
-      <version>${equalsverifier.version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -179,7 +94,6 @@
         <version>${surefire-plugin.version}</version>
         <configuration>
           <systemPropertyVariables>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <maven.home>${maven.home}</maven.home>
           </systemPropertyVariables>
         </configuration>
@@ -203,28 +117,7 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>io.swagger.core.v3</groupId>
-        <artifactId>swagger-maven-plugin-jakarta</artifactId>
-        <version>2.2.15</version>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>resolve</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <outputFileName>openapi</outputFileName>
-          <outputFormat>JSONANDYAML</outputFormat>
-          <outputPath>${basedir}/target/classes</outputPath>
-          <prettyPrint>true</prettyPrint>
-          <resourcePackages>
-            <package>com.felpeto.purchase.controller</package>
-          </resourcePackages>
-        </configuration>
-      </plugin>
+
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${maven-checkstyle-plugin.version}</version>
@@ -244,7 +137,7 @@
           </dependency>
         </dependencies>
         <configuration>
-          <configLocation>src/main/resources/google_checks.xml</configLocation>
+          <configLocation>app/src/main/resources/google_checks.xml</configLocation>
           <consoleOutput>true</consoleOutput>
           <failsOnError>true</failsOnError>
           <linkXRef>false</linkXRef>
@@ -358,19 +251,23 @@
         </configuration>
       </plugin>
     </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>${quarkus.platform.group-id}</groupId>
+          <artifactId>quarkus-maven-plugin</artifactId>
+          <version>${quarkus.platform.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${compiler-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${surefire-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
-  <profiles>
-    <profile>
-      <id>native</id>
-      <activation>
-        <property>
-          <name>native</name>
-        </property>
-      </activation>
-      <properties>
-        <skipITs>false</skipITs>
-        <quarkus.package.type>native</quarkus.package.type>
-      </properties>
-    </profile>
-  </profiles>
 </project>
