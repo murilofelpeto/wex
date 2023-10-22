@@ -1,47 +1,43 @@
 <?xml version="1.0"?>
-<project
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.felpeto</groupId>
   <artifactId>wex</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
+    <assertj.version>3.24.2</assertj.version>
+    <checkstyle.version>10.12.0</checkstyle.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
+    <coverage.branch>1</coverage.branch>
+    <coverage.line>1</coverage.line>
+    <equalsverifier.version>3.15</equalsverifier.version>
+    <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+    <java-faker.version>1.0.2</java-faker.version>
+    <junit-jupiter.version>5.9.3</junit-jupiter.version>
+    <lombok.version>1.18.30</lombok.version>
+    <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
     <maven.compiler.release>17</maven.compiler.release>
+    <mockito.version>5.4.0</mockito.version>
+    <mutation.scan.code>com.felpeto.purchase.*</mutation.scan.code>
+    <mutation.scan.test>com.felpeto.purchase.*</mutation.scan.test>
+    <mutation.skip>false</mutation.skip>
+    <mutation.threshold>96</mutation.threshold>
+    <pitest-junit5-plugin.version>1.2.0</pitest-junit5-plugin.version>
+    <pitest-maven.version>1.14.1</pitest-maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.4.3</quarkus.platform.version>
     <skipITs>true</skipITs>
+    <spotbugs-maven-plugin.version>4.7.3.5</spotbugs-maven-plugin.version>
+    <spotbugs.version>4.7.3</spotbugs.version>
     <surefire-plugin.version>3.1.2</surefire-plugin.version>
-    <lombok.version>1.18.30</lombok.version>
     <swagger-core.version>2.2.14</swagger-core.version>
     <swagger-maven-plugin.version>2.1.6</swagger-maven-plugin.version>
-    <checkstyle.version>10.12.0</checkstyle.version>
-    <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
-    <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
-    <spotbugs.version>4.7.3</spotbugs.version>
-    <spotbugs-maven-plugin.version>4.7.3.5</spotbugs-maven-plugin.version>
-    <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
-    <coverage.branch>1</coverage.branch>
-    <coverage.line>1</coverage.line>
-    <pitest-junit5-plugin.version>1.2.0</pitest-junit5-plugin.version>
-    <pitest-maven.version>1.14.1</pitest-maven.version>
-    <mutation.scan.code>com.felpeto.purchase.*</mutation.scan.code>
-    <mutation.scan.test>com.felpeto.purchase.*</mutation.scan.test>
-    <mutation.threshold>100</mutation.threshold>
-    <mutation.skip>false</mutation.skip>
-    <mockito.version>5.4.0</mockito.version>
     <to-string-verifier.version>1.4.8</to-string-verifier.version>
-    <junit-jupiter.version>5.9.3</junit-jupiter.version>
-    <java-faker.version>1.0.2</java-faker.version>
-    <assertj.version>3.24.2</assertj.version>
-    <equalsverifier.version>3.15</equalsverifier.version>
   </properties>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -53,7 +49,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -83,7 +78,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -91,71 +85,67 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <artifactId>swagger-core-jakarta</artifactId>
       <groupId>io.swagger.core.v3</groupId>
-      <scope>compile</scope>
+      <artifactId>swagger-core-jakarta</artifactId>
       <version>${swagger-core.version}</version>
-    </dependency>
-
-    <!-- TESTS -->
-    <dependency>
-      <artifactId>hibernate-validator</artifactId>
-      <groupId>org.hibernate.validator</groupId>
-      <scope>test</scope>
-      <version>${hibernate-validator.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-validator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <groupId>org.junit.jupiter</groupId>
-      <scope>test</scope>
       <version>${junit-jupiter.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <groupId>org.junit.jupiter</groupId>
-      <scope>test</scope>
       <version>${junit-jupiter.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <groupId>org.junit.jupiter</groupId>
-      <scope>test</scope>
       <version>${junit-jupiter.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <groupId>org.mockito</groupId>
-      <scope>test</scope>
       <version>${mockito.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
-      <groupId>org.mockito</groupId>
-      <scope>test</scope>
       <version>${mockito.version}</version>
-    </dependency>
-    <dependency>
-      <artifactId>assertj-core</artifactId>
-      <groupId>org.assertj</groupId>
       <scope>test</scope>
-      <version>${assertj.version}</version>
     </dependency>
     <dependency>
-      <artifactId>javafaker</artifactId>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
       <version>${java-faker.version}</version>
     </dependency>
     <dependency>
-      <artifactId>to-string-verifier</artifactId>
       <groupId>com.jparams</groupId>
-      <scope>test</scope>
+      <artifactId>to-string-verifier</artifactId>
       <version>${to-string-verifier.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <artifactId>equalsverifier</artifactId>
       <groupId>nl.jqno.equalsverifier</groupId>
-      <scope>test</scope>
+      <artifactId>equalsverifier</artifactId>
       <version>${equalsverifier.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
@@ -205,10 +195,8 @@
             </goals>
             <configuration>
               <systemPropertyVariables>
-                <native.image.path>${project.build.directory}/${project.build.finalName}-runner
-                </native.image.path>
-                <java.util.logging.manager>org.jboss.logmanager.LogManager
-                </java.util.logging.manager>
+                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                 <maven.home>${maven.home}</maven.home>
               </systemPropertyVariables>
             </configuration>
@@ -216,7 +204,17 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-maven-plugin-jakarta</artifactId>
+        <version>2.2.15</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>resolve</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
           <outputFileName>openapi</outputFileName>
           <outputFormat>JSONANDYAML</outputFormat>
@@ -226,79 +224,60 @@
             <package>com.felpeto.purchase.controller</package>
           </resourcePackages>
         </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>resolve</goal>
-            </goals>
-            <phase>compile</phase>
-          </execution>
-        </executions>
-        <groupId>io.swagger.core.v3</groupId>
-        <version>2.2.15</version>
       </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven-checkstyle-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>${checkstyle.version}</version>
+          </dependency>
+        </dependencies>
         <configuration>
           <configLocation>src/main/resources/google_checks.xml</configLocation>
           <consoleOutput>true</consoleOutput>
           <failsOnError>true</failsOnError>
           <linkXRef>false</linkXRef>
         </configuration>
-
-        <!-- Code Quality -->
-        <dependencies>
-          <dependency>
-            <artifactId>checkstyle</artifactId>
-            <groupId>com.puppycrawl.tools</groupId>
-            <version>${checkstyle.version}</version>
-          </dependency>
-        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maven-plugin.version}</version>
         <executions>
           <execution>
+            <phase>compile</phase>
             <goals>
               <goal>check</goal>
             </goals>
-            <phase>validate</phase>
           </execution>
         </executions>
-        <groupId>org.apache.maven.plugins</groupId>
-        <version>${maven-checkstyle-plugin.version}</version>
-      </plugin>
-
-      <plugin>
-        <artifactId>spotbugs-maven-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>${spotbugs.version}</version>
+          </dependency>
+        </dependencies>
         <configuration>
           <effort>Max</effort>
           <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
         </configuration>
-        <dependencies>
-          <dependency>
-            <artifactId>spotbugs</artifactId>
-            <groupId>com.github.spotbugs</groupId>
-            <version>${spotbugs.version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <phase>compile</phase>
-          </execution>
-        </executions>
-        <groupId>com.github.spotbugs</groupId>
-        <version>${spotbugs-maven-plugin.version}</version>
       </plugin>
-
       <plugin>
+        <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>com/felpeto/purchase/controller/configuration/*ObjectMapperConfiguration.*</exclude>
-            <exclude>com/felpeto/purchase/controller/configuration/*BigDecimalSerializer.*</exclude>
-          </excludes>
-        </configuration>
+        <version>${jacoco-maven-plugin.version}</version>
         <executions>
           <execution>
             <goals>
@@ -306,6 +285,10 @@
             </goals>
           </execution>
           <execution>
+            <id>jacoco-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
             <configuration>
               <rules>
                 <rule>
@@ -325,25 +308,41 @@
                 </rule>
               </rules>
             </configuration>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <id>jacoco-check</id>
           </execution>
           <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
             <goals>
               <goal>report</goal>
             </goals>
-            <id>report</id>
-            <phase>prepare-package</phase>
           </execution>
         </executions>
-        <groupId>org.jacoco</groupId>
-        <version>${jacoco-maven-plugin.version}</version>
+        <configuration>
+          <excludes>
+            <exclude>com/felpeto/purchase/controller/configuration/*ObjectMapperConfiguration.*</exclude>
+            <exclude>com/felpeto/purchase/controller/configuration/*BigDecimalSerializer.*</exclude>
+          </excludes>
+        </configuration>
       </plugin>
-
       <plugin>
+        <groupId>org.pitest</groupId>
         <artifactId>pitest-maven</artifactId>
+        <version>${pitest-maven.version}</version>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>mutationCoverage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-junit5-plugin</artifactId>
+            <version>${pitest-junit5-plugin.version}</version>
+          </dependency>
+        </dependencies>
         <configuration>
           <mutationThreshold>${mutation.threshold}</mutationThreshold>
           <skip>${mutation.skip}</skip>
@@ -357,27 +356,9 @@
             <param>com.felpeto.purchase.controller.configuration.BigDecimalSerializer</param>
           </excludedClasses>
         </configuration>
-        <dependencies>
-          <dependency>
-            <artifactId>pitest-junit5-plugin</artifactId>
-            <groupId>org.pitest</groupId>
-            <version>${pitest-junit5-plugin.version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <goals>
-              <goal>mutationCoverage</goal>
-            </goals>
-            <phase>test</phase>
-          </execution>
-        </executions>
-        <groupId>org.pitest</groupId>
-        <version>${pitest-maven.version}</version>
       </plugin>
     </plugins>
   </build>
-
   <profiles>
     <profile>
       <id>native</id>

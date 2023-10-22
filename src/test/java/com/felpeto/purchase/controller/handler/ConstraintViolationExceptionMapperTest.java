@@ -40,7 +40,7 @@ class ConstraintViolationExceptionMapperTest {
     final var body = (ErrorResponseDto) response.getEntity();
 
     assertThat(response.getStatus()).isEqualTo(400);
-    assertThat(body.getCode()).isEqualTo("INVALID_FORMAT_EXCEPTION");
+    assertThat(body.getCode()).isEqualTo("REQUEST_FORMAT_EXCEPTION");
     assertThat(body.getDetails()).isEmpty();
     assertThat(body.getMessage()).isEqualTo(exception.getMessage());
     assertThat(body.getParameter()).isEqualTo("/path");

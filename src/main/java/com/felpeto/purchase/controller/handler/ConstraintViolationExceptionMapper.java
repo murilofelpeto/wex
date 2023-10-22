@@ -35,7 +35,7 @@ public class ConstraintViolationExceptionMapper implements
     final var details = toErrorDetails(constraintViolations);
 
     final ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
-        .code("INVALID_FORMAT_EXCEPTION")
+        .code("REQUEST_FORMAT_EXCEPTION")
         .details(details)
         .message(exception.getMessage())
         .parameter(uriInfo.getAbsolutePath().getPath())

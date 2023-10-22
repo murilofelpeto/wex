@@ -30,6 +30,7 @@ public class PurchaseRequestDto {
   private String description;
 
   @Schema(name = "transactionDate", description = "Transaction date", requiredMode = REQUIRED)
+  @NotNull(message = "Transaction date cannot be null")
   @PastOrPresent(message = "Transaction date cannot be in the future")
   private LocalDate transactionDate;
 

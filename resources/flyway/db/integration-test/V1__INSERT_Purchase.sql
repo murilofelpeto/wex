@@ -1,0 +1,10 @@
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('a93df063-6749-4e35-9aac-c31f4fe83a7f', '-', '')), 1, 100.00, '2022-01-01', 'test');
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('b2601421-2971-422c-b21e-64dd12122157', '-', '')), 2, 982.23, '2023-10-22', 'test');
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('d6da0853-bfe1-4a04-902c-c43a6a79d5b5', '-', '')), 3, 500.69, '2023-09-22', 'test');
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('7892c1dc-f3c7-4cf6-9e25-56cf6b2d6de4', '-', '')), 4, 325.99, '2023-08-22', 'test');
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('5ffc87ae-ffd9-4759-b589-64b1648378d8', '-', '')), 5, 687.50, '2023-07-22', 'test');
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('c0b78e2d-8419-4605-9675-b8691fc42f37', '-', '')), 6, 183.00, '2023-06-22', 'test');
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('5c0a6f2a-45d8-424d-835b-f9747311529a', '-', '')), 7, 546.55, '2023-05-22', 'test');
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('e0df3e90-9fa0-4afd-96b2-9b8588946325', '-', '')), 8, 654.54, '2023-04-22', 'test');
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('69f64fb4-9b70-4673-95f1-f14b4c9fde97', '-', '')), 9, 105.98, '2023-03-22', 'test');
+Insert Into PurchaseEntity (uuid, id, amount, transaction_date, description) Values (UNHEX(replace('099d16b8-65b0-4e3d-a948-193ebcc7d421', '-', '')), 10, 657.25, '2023-02-22', 'test');

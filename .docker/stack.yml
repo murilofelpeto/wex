@@ -12,7 +12,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_PASSWORD: felpeto
-      MYSQL_DATABASE: wax
+      MYSQL_DATABASE: wex
       MYSQL_USER: murilo
     ports:
       - 3306:3306
