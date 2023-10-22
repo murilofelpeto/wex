@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -90,7 +91,7 @@ public class PurchaseController {
   @Path("/{uuid}")
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
-  public Response get(@PathParam("uuid") final UUID uuid, @QueryParam("country") final String country) {
+  public Response get(@PathParam("uuid") final UUID uuid, @QueryParam("country") @NotBlank(message = "Country is mandatory") final String country) {
     log.info("Retrieving purchase {}", uuid);
     final var response = service.getPurchaseTransaction(uuid, country);
     return Response.ok(toPurchaseResponseDto(response)).build();
