@@ -19,6 +19,18 @@
     <maven-failsafe-plugin.version>3.1.2</maven-failsafe-plugin.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>1.19.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -34,43 +46,39 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
       <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>mysql</artifactId>
-      <version>1.19.1</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers</artifactId>
-      <version>1.19.1</version>
-      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mysql</artifactId>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>1.19.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.7</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <version>5.3.2</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>json-path</artifactId>
       <version>5.3.2</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.rest-assured</groupId>
@@ -81,7 +89,6 @@
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured-all</artifactId>
       <version>5.3.2</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.mysql</groupId>
@@ -100,58 +107,47 @@
       <version>3.2.0</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>2.0.9</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.2</version>
-    </dependency>
   </dependencies>
 
   <profiles>
-  <profile>
-    <id>quarkus</id>
-    <activation>
-      <activeByDefault>true</activeByDefault>
-    </activation>
-    <properties>
-      <dockerfile>Dockerfile</dockerfile>
-    </properties>
-  </profile>
+    <profile>
+      <id>quarkus</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <dockerfile>Dockerfile</dockerfile>
+      </properties>
+    </profile>
   </profiles>
 
   <build>
     <plugins>
       <plugin>
-      <groupId>io.fabric8</groupId>
-      <artifactId>docker-maven-plugin</artifactId>
-      <version>0.43.4</version>
-      <executions>
-        <execution>
-          <phase>pre-integration-test</phase>
-          <goals>
-            <goal>build</goal>
-          </goals>
-        </execution>
-      </executions>
-      <configuration>
-        <images>
-          <image>
-            <name>app-test:integration</name>
-            <alias>dockerfile</alias>
-            <build>
-              <contextDir>${project.parent.basedir}</contextDir>
-              <dockerFile>${project.parent.basedir}/${dockerfile}</dockerFile>
-            </build>
-          </image>
-        </images>
-      </configuration>
-    </plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.43.4</version>
+        <executions>
+          <execution>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <images>
+            <image>
+              <name>app-test:integration</name>
+              <alias>dockerfile</alias>
+              <build>
+                <contextDir>${project.parent.basedir}</contextDir>
+                <dockerFile>${project.parent.basedir}/${dockerfile}</dockerFile>
+              </build>
+            </image>
+          </images>
+        </configuration>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

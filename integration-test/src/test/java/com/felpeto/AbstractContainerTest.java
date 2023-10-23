@@ -24,7 +24,7 @@ import org.testcontainers.utility.MountableFile;
 
 abstract class AbstractContainerTest {
 
-  private static ObjectMapper mapper = new ObjectMapper();
+  private static final ObjectMapper MAPPER = new ObjectMapper();
   private final Faker faker = new Faker();
   private static final GenericContainer<?> APP;
   private static final GenericContainer<?> FLYWAY;
@@ -45,7 +45,12 @@ abstract class AbstractContainerTest {
 
     APP = buildAppContainer(MYSQL_CONTAINER, FLYWAY);
     APP.start();
-
+    System.out.println(APP.getHost() + ":" + APP.getFirstMappedPort());
+    try {
+      Thread.sleep(60000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
     initRestAssured();
   }
 
@@ -89,8 +94,8 @@ abstract class AbstractContainerTest {
     RestAssured.baseURI = "http://" + APP.getHost();
     RestAssured.port = APP.getFirstMappedPort();
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    mapper.registerModule(new JavaTimeModule());
-    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    MAPPER.registerModule(new JavaTimeModule());
+    MAPPER.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
   }
 
   PurchaseRequestDto buildDefaultRequest() throws JsonProcessingException {
@@ -103,7 +108,7 @@ abstract class AbstractContainerTest {
 
   String convertToString(Object object) {
     try {
-      return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+      return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(object);
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }

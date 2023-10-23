@@ -172,17 +172,6 @@
           </compilerArgs>
         </configuration>
       </plugin>
-
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
-        <configuration>
-          <systemPropertyVariables>
-            <maven.home>${user.home}/.m2</maven.home>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-maven-plugin-jakarta</artifactId>
@@ -253,11 +242,7 @@
                 </goals>
                 <configuration>
                   <systemPropertyVariables>
-                    <native.image.path>
-                      ${project.build.directory}/${project.build.finalName}-runner
-                    </native.image.path>
-                    <java.util.logging.manager>org.jboss.logmanager.LogManager
-                    </java.util.logging.manager>
+                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                     <maven.home>${user.home}/.m2</maven.home>
                   </systemPropertyVariables>
                 </configuration>
