@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "transactionDate": {
+      "type": "string"
+    },
+    "exchangeRate": {
+      "type": "number"
+    },
+    "amount": {
+      "type": "string"
+    },
+    "convertedMoney": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "description",
+    "transactionDate",
+    "exchangeRate",
+    "amount",
+    "convertedMoney"
+  ]
+}

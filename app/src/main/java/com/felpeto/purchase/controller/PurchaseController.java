@@ -9,10 +9,12 @@ import com.felpeto.purchase.controller.dto.response.PurchaseResponseDto;
 import com.felpeto.purchase.controller.handler.dto.ErrorResponseDto;
 import com.felpeto.purchase.controller.mapper.PurchaseMapper;
 import com.felpeto.purchase.service.PurchaseService;
+import io.quarkus.security.Authenticated;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -29,6 +31,7 @@ import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Authenticated
 @ApplicationScoped
 @Path("/v1/purchase")
 public class PurchaseController {
@@ -60,6 +63,7 @@ public class PurchaseController {
   @POST
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
+  @RolesAllowed("admin")
   public Response save(@Valid @NotNull final PurchaseRequestDto purchaseRequestDto) {
     log.info("Saving purchase {}", purchaseRequestDto);
     final var purchase = PurchaseMapper.toPurchase(purchaseRequestDto);
@@ -91,6 +95,7 @@ public class PurchaseController {
   @Path("/{uuid}")
   @Consumes(APPLICATION_JSON)
   @Produces(APPLICATION_JSON)
+  @RolesAllowed("admin")
   public Response get(@PathParam("uuid") final UUID uuid,
       @QueryParam("country") @NotBlank(message = "Country is mandatory") final String country) {
     log.info("Retrieving purchase {}", uuid);

@@ -3,10 +3,12 @@ package com.felpeto.purchase.client.handler;
 import com.felpeto.purchase.client.handler.exception.ClientBadRequestException;
 import com.felpeto.purchase.client.handler.exception.ClientInternalServerErrorException;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.Provider;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
 
 @Slf4j
+@Provider
 public class ClientExceptionHandler implements ResponseExceptionMapper<RuntimeException> {
 
   @Override
@@ -24,5 +26,10 @@ public class ClientExceptionHandler implements ResponseExceptionMapper<RuntimeEx
           response.getStatus());
     }
     return null;
+  }
+
+  @Override
+  public int getPriority() {
+    return 1;
   }
 }
