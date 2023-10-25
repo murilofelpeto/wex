@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.felpeto.container.AppContainer;
 import com.felpeto.purchase.controller.dto.request.PurchaseRequestDto;
 import com.github.javafaker.Faker;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -45,12 +46,13 @@ abstract class AbstractContainerTest {
 
     APP = buildAppContainer(MYSQL_CONTAINER, FLYWAY);
     APP.start();
-    System.out.println(APP.getHost() + ":" + APP.getFirstMappedPort());
+    System.out.println("App iniciado");
     try {
-      Thread.sleep(60000);
+      Thread.sleep(5000);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
+
     initRestAssured();
   }
 
@@ -78,15 +80,17 @@ abstract class AbstractContainerTest {
   }
 
   private static GenericContainer<?> buildAppContainer(final Startable... dependsOn) {
-    return new GenericContainer<>("app-test:integration")
+    return new AppContainer()
         .dependsOn(dependsOn)
         .withNetwork(NETWORK)
+        .withExposedPorts(8080)
+        .withHostDebug(5005)
         .withEnv("FISCAL_DATA_URL", "http://host.testcontainers.internal:" + MOCK_SERVER.port())
         .withEnv("MYSQL_USER", "test")
         .withEnv("MYSQL_PASSWORD", "test")
         .withEnv("MYSQL_URL", "jdbc:mysql://testdb:" + MySQLContainer.MYSQL_PORT + "/wex?autoReconnect=true&useSSL=false")
-        .withExposedPorts(8080)
-        .waitingFor(Wait.forHttp("/q/health/ready").forStatusCode(200))
+        .withEnv("JAVA_TOOL_OPTIONS", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005")
+//        .waitingFor(Wait.forHttp("/q/health/ready").forStatusCode(200))
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("APP_CONTAINER")));
   }
 
@@ -95,7 +99,6 @@ abstract class AbstractContainerTest {
     RestAssured.port = APP.getFirstMappedPort();
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     MAPPER.registerModule(new JavaTimeModule());
-    MAPPER.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
   }
 
   PurchaseRequestDto buildDefaultRequest() throws JsonProcessingException {
