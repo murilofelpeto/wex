@@ -1,71 +1,103 @@
-# wex
+# Wex
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+This project uses Quarkus as framework.
 
 ## Running the application in dev mode
 
-You can run your application in dev mode that enables live coding using:
+To execute the application you must navigate to .docker folder and start the stack.yaml with the command:
+```shell script
+docker-compose -f stack.yml -p docker up -d
+```
+This compose will start all the requirements for the application be able to run.
+There you will find:
+1. MySQL database
+2. Flyway - For versionsing the database
+3. Adminer - To access database
+4. Rapidoc - OpenAPI Spec viewing.
+5. Nginx - Reverse proxy.
+6. Prometheus - To scrap metrics on our app.
+7. Grafana - To show dashboards
+8. Keycloak - Provides authentication for our app.
+
+When the compose finishes got to app folder where you will execute the following command:
 ```shell script
 ./mvnw compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
-## Packaging and running the application
-
-The application can be packaged using:
+## Testing endpoints
+After quarkus starts, you need to get a token at:
 ```shell script
-./mvnw package
+curl --location 'http://localhost:8081/realms/wex/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=password' \
+--data-urlencode 'client_id=backend' \
+--data-urlencode 'client_secret=FOJHmE8A3ckjM5mANHLBAE72PbFIyzED' \
+--data-urlencode 'username=wex-admin' \
+--data-urlencode 'password=wex-admin'
 ```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+We have two users
+1. wex-admin (password wex-admin), with admin role.
+2. user (password user), with user role.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+Our app only accept admin role, so if ou try to access any endpoint with user, you will receive a 403 Forbidden.
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
+After you get your token you can open your browser and access
+http://localhost:5000
+It will open the Rapidoc to you test, like this image:
+![Rapidoc home page](resources/readme-images/rapidoc.png?raw=true)
+In the authentication section you will insert the token following the format: Bearer <token> and press update. Doing this all endpoints will automatically send the Authorization header with your token.
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+The endpoints we have are:
+* Save a new purchase (/v1/purchases)
+* Retrieve a purchase (/v1/purchases/{uuid}?country=<country_name>)
+Obs: If you don't want to create a new purchase, we have some preloaded for you, just see the V9999999999999__INSERT_Purchase.sql file at /resources/flyway/db/integration-test
 
-## Creating a native executable
+## Monitoring application
+If you access http://localhost:5000/grafana you will access our grafana dashboards.
+The user and password for access is (user: admin, password: admin). After you prompt the credentials, grafana will ask you to change the password, just pick one of your choice or maintain the same.
 
-You can create a native executable using: 
-```shell script
-./mvnw package -Dnative
-```
+In grafana we have two dashboards:
+1. App - Basic - That monitor JVM memory consumption, CPU usage and much more information
+2. Rest client - This dashboard collect data for our Fault Tolerance annotations.
+![Dashboard App Basic](resources/readme-images/App-basic-dashboard.png)
+![Dashboard Rest client](resources/readme-images/Rest-client.png)
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
+If you prefer going to prometheus just access http://localhost:5000/prometheus
+![Prometheus](resources/readme-images/Prometheus.png)
 
-You can then execute your native executable with: `./target/wex-1.0.0-SNAPSHOT-runner`
+## Accessing database
+If you like to perform some queries in database, you can access http://localhost:5000/adminer
+![adminer login screen](resources/readme-images/adminer-login.png)
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+Now you just need to complete the blank fields:
+* Username: root
+* Password: admin
+* Database: wex
 
-## Related Guides
+![adminer homepage png](resources/readme-images/adminer-homepage.png)
+Now feel free to navigate through database.
 
-- REST Client Reactive ([guide](https://quarkus.io/guides/rest-client-reactive)): Call REST services reactively
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
+## Testing tools
+This application has a test coverage of 96% for line and mutation coverage.
+### Jacoco
+Jacoco is a tool to help us measure line coverage of our application
+![jacoco report](resources/readme-images/jacoco-report.png)
+### PiTest
+PiTest is a tool to measure mutation coverage in our application
+![pitest report](resources/readme-images/pitest-report.png)
 
-## Provided Code
+### Testcontainers
+For integration test it's using Testcontainers and RestAssured.
+If you want to see all the integration tests, it's located at integration-test module.
+Obs: I need to skip IT because I could not configure Keycloak container in time. It's always returning issuer invalid and if I skip issuer validation I receive an error at Keycloak container.
 
-### Hibernate ORM
+## Code Quality
+### Sonar
+This application was scanned by sonar. See the report below:
+![sonar](resources/readme-images/sonar.png)
 
-Create your first JPA entity
+### Spot bugs
+This application uses spotbugs to verify any vulnerability in the code.
 
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+### Checkstyle
+This application uses Google checkstyle to maintain a pattern for the whole project.
