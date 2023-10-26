@@ -2,6 +2,17 @@
 
 This project uses Quarkus as framework.
 
+## Problem to solve
+### Requirement #1: Store a Purchase Transaction
+Your application must be able to accept and store (i.e., persist) a purchase transaction with a description, transaction
+date, and a purchase amount in United States dollars. When the transaction is stored, it will be assigned a unique
+identifier.
+
+### Requirement #2: Retrieve a Purchase Transaction in a Specified Country’s Currency
+Based upon purchase transactions previously submitted and stored, your application must provide a way to retrieve the
+stored purchase transactions converted to currencies supported by the Treasury Reporting Rates of Exchange API based
+upon the exchange rate active for the date of the purchase.
+
 ## Running the application in dev mode
 
 To execute the application you must navigate to .docker folder and start the stack.yaml with the command:
