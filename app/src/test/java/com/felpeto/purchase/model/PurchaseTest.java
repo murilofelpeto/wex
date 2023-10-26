@@ -177,13 +177,14 @@ class PurchaseTest {
       final UUID uuid,
       final String message) {
 
-    assertThatThrownBy(() -> Purchase.withExchangeRate()
+    final var purchaseBuilder = Purchase.withExchangeRate()
         .amount(amount)
         .description(description)
         .exchangeRate(exchangeRate)
         .transactionDate(transactionDate)
-        .uuid(uuid)
-        .buildWithExchangeRate())
+        .uuid(uuid);
+
+    assertThatThrownBy(purchaseBuilder::buildWithExchangeRate)
         .isExactlyInstanceOf(NullPointerException.class)
         .hasMessage(message);
   }
@@ -195,11 +196,12 @@ class PurchaseTest {
       final Money amount,
       final String message) {
 
-    assertThatThrownBy(() -> Purchase.builder()
+    final var purchaseBuilder = Purchase.builder()
         .amount(amount)
         .description(description)
-        .transactionDate(transactionDate)
-        .build())
+        .transactionDate(transactionDate);
+
+    assertThatThrownBy(purchaseBuilder::build)
         .isExactlyInstanceOf(NullPointerException.class)
         .hasMessage(message);
   }

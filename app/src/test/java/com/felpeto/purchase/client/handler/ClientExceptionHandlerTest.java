@@ -101,4 +101,10 @@ class ClientExceptionHandlerTest {
     assertThat(exception).isNull();
   }
 
+  @Test
+  void getPriorityShouldReturnOne() {
+    final int priority = handler.getPriority();
+    assertThat(priority).isEqualTo(1);
+  }
+
 }

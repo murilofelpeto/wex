@@ -26,6 +26,9 @@ public class PurchaseService {
   private static final String FISCAL_DATA_FIELDS = "record_date, currency, exchange_rate";
   private static final LocalDate TODAY = LocalDate.now();
   private static final String SORT_RECORD_DATE = "-record_date";
+  private static final String TARGET = "Purchase";
+  private static final String TRANSACTION_DATE = "transactionDate";
+  private static final String UUID = "uuid";
   private final FiscalData fiscalData;
 
   public PurchaseService(@RestClient final FiscalData fiscalData) {
@@ -43,7 +46,7 @@ public class PurchaseService {
   public Purchase save(final Purchase purchase) {
     final var entity = new PurchaseEntity();
     entity.id = null;
-    entity.uuid = UUID.randomUUID();
+    entity.uuid = java.util.UUID.randomUUID();
     entity.description = purchase.getDescription().getValue();
     entity.transactionDate = purchase.getTransactionDate();
     entity.amount = purchase.getAmount().getValue();
@@ -57,9 +60,9 @@ public class PurchaseService {
 
     if (optEntity.isEmpty()) {
       throw new ValueNotFoundException("Purchase not found",
-          "uuid",
-          "Purchase",
-          "uuid",
+          UUID,
+          TARGET,
+          UUID,
           "Purchase not found");
     }
 
@@ -68,9 +71,9 @@ public class PurchaseService {
 
     if (isTransactionDateInvalid(transactionDate)) {
       throw new InvalidDateException("Transaction date is older than 6 months.",
-          "transactionDate",
-          "Purchase",
-          "transactionDate",
+          TRANSACTION_DATE,
+          TARGET,
+          TRANSACTION_DATE,
           "Transaction date is older than 6 months.");
     }
 
@@ -89,9 +92,9 @@ public class PurchaseService {
     return dataList.stream()
         .min(Comparator.comparing(PurchaseService::compareDate))
         .orElseThrow(() -> new InvalidDateException("Could not find closest date",
-            "transactionDate",
-            "Purchase",
-            "transactionDate",
+            TRANSACTION_DATE,
+            TARGET,
+            TRANSACTION_DATE,
             "There is no data for your request."));
   }
 

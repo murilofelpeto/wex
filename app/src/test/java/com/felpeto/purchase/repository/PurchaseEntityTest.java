@@ -42,7 +42,7 @@ class PurchaseEntityTest {
       final var response = PurchaseEntity.findByUuid(uuid);
 
       assertThat(response).isNotEmpty();
-      assertThat(response.get()).isEqualTo(entity);
+      assertThat(response).contains(entity);
     }
   }
 

@@ -5,8 +5,8 @@
     "description" : "This API helps manage all purchases made by WEX users",
     "contact" : {
       "name" : "WEX",
-      "url" : "https://wex.io",
-      "email" : "contato@wex.io"
+      "url" : "https://wex.com",
+      "email" : "contact@wex.com"
     },
     "version" : "1"
   },

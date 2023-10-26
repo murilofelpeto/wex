@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
         title = "WEX - Purchase",
         version = "1",
         description = "This API helps manage all purchases made by WEX users",
-        contact = @Contact(url = "https://wex.io", name = "WEX", email = "contato@wex.io")
+        contact = @Contact(url = "https://wex.com", name = "WEX", email = "contact@wex.com")
     )
 )
 public class OpenApiController {
